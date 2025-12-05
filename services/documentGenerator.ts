@@ -1,5 +1,5 @@
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, HeadingLevel, AlignmentType, ShadingType, BorderStyle } from 'docx';
-import { saveAs } from 'file-saver';
+import FileSaver from 'file-saver';
 import { ProjectInfo, MaterialItem, LaborItem, DietInfo, WorkerInfo, Language } from '../types';
 
 const TRANSLATIONS = {
@@ -363,5 +363,5 @@ export const generateDocument = async (
 
   const blob = await Packer.toBlob(doc);
   const fileName = `${project.projectName.replace(/\s+/g, '_') || 'presupuesto'}_${lang}.docx`;
-  saveAs(blob, fileName);
+  FileSaver.saveAs(blob, fileName);
 };

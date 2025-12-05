@@ -49,7 +49,7 @@ const App: React.FC = () => {
 
   // --- HANDLERS ---
   const addMaterial = () => {
-    setMaterials([...materials, { id: Date.now().toString(), description: '', quantity: 0, unit: 'unidad', unitPrice: 0 }]);
+    setMaterials([...materials, { id: Date.now().toString() + Math.random(), description: '', quantity: 0, unit: 'unidad', unitPrice: 0 }]);
   };
 
   const removeMaterial = (id: string) => {
@@ -63,7 +63,7 @@ const App: React.FC = () => {
   };
 
   const addLabor = () => {
-    setLabor([...labor, { id: Date.now().toString(), description: '', cost: 0 }]);
+    setLabor([...labor, { id: Date.now().toString() + Math.random(), description: '', cost: 0 }]);
   };
 
   const removeLabor = (id: string) => {
@@ -77,7 +77,7 @@ const App: React.FC = () => {
   };
 
   const addWorker = () => {
-    setWorkers([...workers, { id: Date.now().toString(), name: '', role: 'Ayudante' }]);
+    setWorkers([...workers, { id: Date.now().toString() + Math.random(), name: '', role: 'Ayudante' }]);
   };
 
   const removeWorker = (id: string) => {
@@ -90,7 +90,7 @@ const App: React.FC = () => {
       await generateDocument(project, workers, materials, labor, diet, lang);
     } catch (error) {
       console.error(error);
-      alert('Error al generar el documento');
+      alert('Error al generar el documento. Por favor revise la consola.');
     } finally {
       setIsGenerating(false);
     }
@@ -105,7 +105,7 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="max-w-5xl mx-auto p-4 md:p-8">
+    <div className="max-w-5xl mx-auto p-4 md:p-8 pb-32">
       {/* HEADER */}
       <header className="text-center mb-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
         <h1 className="text-3xl font-extrabold text-secondary mb-2">Presupuesto de Proyecto</h1>
@@ -162,10 +162,11 @@ const App: React.FC = () => {
                     }}
                   />
                 </div>
-                {index > 1 && (
+                {index > 0 && (
                   <button 
                     onClick={() => removeWorker(worker.id)}
-                    className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded"
+                    className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded mb-0.5"
+                    title="Eliminar trabajador"
                   >
                     <Trash2 size={18} />
                   </button>
@@ -242,12 +243,14 @@ const App: React.FC = () => {
                       ${(item.quantity * item.unitPrice).toFixed(2)}
                     </td>
                     <td className="p-3">
-                      <button 
-                        onClick={() => removeMaterial(item.id)}
-                        className="text-gray-300 hover:text-red-500 transition-colors"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      {materials.length > 1 && (
+                        <button 
+                          onClick={() => removeMaterial(item.id)}
+                          className="text-gray-300 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -297,7 +300,8 @@ const App: React.FC = () => {
                 </div>
                 <button 
                   onClick={() => removeLabor(item.id)}
-                  className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-all"
+                  className={`text-gray-300 hover:text-red-500 transition-all ${labor.length > 1 ? 'opacity-100' : 'opacity-0 cursor-default'}`}
+                  disabled={labor.length <= 1}
                 >
                   <Trash2 size={16} />
                 </button>
